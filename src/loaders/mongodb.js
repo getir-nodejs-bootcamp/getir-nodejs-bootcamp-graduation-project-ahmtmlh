@@ -5,7 +5,7 @@ const db = Mongoose.connection;
 const uri  = "mongodb+srv://challengeUser:WUMglwNBaydH8Yvu@challenge-xzwqd.mongodb.net/getir-case-study?retryWrites=true"
 
 db.once("open", () => {
-  console.log("MongoDB connction successful");
+  console.log("MongoDB connection successful");
 });
 
 const connectDB = async () => {

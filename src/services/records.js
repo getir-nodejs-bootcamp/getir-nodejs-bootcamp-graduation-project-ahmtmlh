@@ -1,5 +1,6 @@
 const Records = require('../model/Record')
 const hs = require('http-status')
+const lodash = require('lodash')
 
 const getISODate = (date) => {
     return new Date(new Date(date).toISOString())
@@ -7,6 +8,7 @@ const getISODate = (date) => {
 
 class RecordsService{
     query(source) {
+        console.time('DB Read')
         const p = new Promise((resolve, reject) => {
             Records.find({
                 createdAt: {
@@ -14,14 +16,22 @@ class RecordsService{
                     $lte: getISODate(source.endDate)
                 }
             }).then(records => {
+                console.timeEnd('DB Read')
+                console.time('Count filtering')
                 let arr = []
                 for (let record of records) {
                     let totalCount = record.counts.reduce((v1, v2) => { return v1 + v2 }, 0)
-                    if (totalCount >= source.minCount && totalCount <= source.maxCount) {
-                        record.totalCount = totalCount
-                        arr.push(record)
+                    if (lodash.inRange(totalCount, source.minCount, source.maxCount)) {
+                        let temp = {
+                            'key': record.key,
+                            'createdAt': record.createdAt,
+                            'totalCount': totalCount
+                        }
+                        arr.push(temp)
                     }
                 }
+
+                console.timeEnd('Count filtering')
 
                 if (arr.length > 0) {
                     resolve(arr)
@@ -36,4 +46,4 @@ class RecordsService{
    }
 }
 
-module.exports = RecordsService
+module.exports = new RecordsService()

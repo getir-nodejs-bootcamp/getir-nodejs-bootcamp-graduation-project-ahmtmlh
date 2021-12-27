@@ -1,5 +1,5 @@
 const express = require("express");
-const RecordController = require("../controllers/records");
+const RecordController = require("../controllers/Records");
 const validate = require('../middlewares/validate')
 const queryRecordValidation = require('../validations/Records')
 

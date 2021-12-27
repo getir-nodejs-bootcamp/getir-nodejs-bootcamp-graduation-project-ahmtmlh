@@ -1,4 +1,7 @@
 module.exports = (error, req, res, next) => {
-    res.status(error.code || 500)
-    res.send(err || {code: 500, msg: 'Internal server error'})
+    const status = error.code || error.statusCode || 500
+    const toSend = { code: status, msg: error.msg || 'Internal server error' }
+    //console.log(toSend)
+    res.status(status)
+    res.send(toSend)
 };

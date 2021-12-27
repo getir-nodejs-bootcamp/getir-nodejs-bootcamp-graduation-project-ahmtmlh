@@ -1,4 +1,4 @@
-const RecordsService = require('../services/records')
+const RecordsService = require('../services/Records')
 const hs = require('http-status')
 
 class RecordController{
