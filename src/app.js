@@ -50,6 +50,9 @@ function setUpLoggers() {
   }
   app.use(morgan('combined', { skip: (req, res) => { return res.statusCode < 400 }, stream: fs.createWriteStream(path.join(errorPath, 'error.log'), {flags: 'a'})}))
   
+  // Console logger, for live tracking
+  app.use(morgan('common'))
+
 }
 
 
