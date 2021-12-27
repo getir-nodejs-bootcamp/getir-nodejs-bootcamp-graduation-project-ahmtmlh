@@ -1,5 +1,6 @@
 const express  = require('express')
 const loader = require('./loaders')
+const configure = require('./config')
 const cors = require('cors')
 const fs = require('fs')
 const morgan = require('morgan')
@@ -8,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler')
 const { RecordRouter } = require('./routes')
 
 loader()
+configure()
 
 const app = express()
 
