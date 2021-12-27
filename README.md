@@ -12,4 +12,6 @@ Requirements
 - The public endpoint URL of the deployed API which is available for testing.
 
 ## Deploy
-The application is deployed at: https://getir-bootcamp-ahmtmlh.herokuapp.com/
+- The application is deployed at: https://getir-bootcamp-ahmtmlh.herokuapp.com/
+- Only available endpoint is '/records/query' endpoint. However, api handles unknown endpoints with an error message.
+- Request body must be JSON for this endpoint to be able to work
