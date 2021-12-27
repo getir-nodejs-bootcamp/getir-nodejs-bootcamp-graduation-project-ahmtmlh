@@ -1,14 +1,12 @@
 const express  = require('express')
-const configure = require('./config')
 const loader = require('./loaders')
-const errorHandler = require('./middlewares/errorHandler')
-const { RecordRouter } = require('./routes')
 const cors = require('cors')
 const fs = require('fs')
 const morgan = require('morgan')
 const path = require('path')
+const errorHandler = require('./middlewares/errorHandler')
+const { RecordRouter } = require('./routes')
 
-configure()
 loader()
 
 const app = express()
@@ -23,22 +21,17 @@ app.use(
 
 setUpLoggers()
 
-app.listen(process.env.APP_PORT, () => {
-  console.log('Application is running on: ', process.env.APP_PORT)
+app.use('/records', RecordRouter)
   
-  app.use('/records', RecordRouter)
+app.use((req, res, next) => {
+  const error = {
+    code: '404',
+    msg: 'No route was found'
+  }
+  next(error);
+});
 
-  app.use((req, res, next) => {
-    const error = {
-      code: '404',
-      msg: 'No route was found'
-    }
-    next(error);
-  });
-  
-  app.use(errorHandler);
-})
-
+app.use(errorHandler);
 
 function setUpLoggers() {
   // Setup network logger
@@ -56,3 +49,6 @@ function setUpLoggers() {
   app.use(morgan('combined', { skip: (req, res) => { return res.statusCode < 400 }, stream: fs.createWriteStream(path.join(errorPath, 'error.log'), {flags: 'a'})}))
   
 }
+
+
+module.exports = app
